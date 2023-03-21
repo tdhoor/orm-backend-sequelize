@@ -50,10 +50,10 @@ async function seedDb(req, res, next) {
 
         console.log(performance.now() - p1);
         const count = await countEntities();
-        console.log('====================================');
+
         res.status(200).json({ message: "DB seeded", count });
-        console.log('====================================');
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: "Error seeding DB", error });
     }
 }
