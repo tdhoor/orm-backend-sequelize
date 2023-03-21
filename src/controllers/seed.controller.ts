@@ -6,7 +6,8 @@ import { Order } from "../entity/order.entity";
 import { ProductCategory } from "../entity/product-category.entity";
 import { Product } from "../entity/product.entity";
 import { deleteAllEntities } from "../functions/delete-all-entities.function";
-import { countEntities } from "src/functions/count-entities.function";
+import { countEntities } from "../functions/count-entities.function";
+import { calcProductCategoryAmount } from "@core/functions/calc-product-category-amount.function";
 
 async function seedDb(req, res, next) {
     try {
@@ -14,16 +15,9 @@ async function seedDb(req, res, next) {
         let p1 = performance.now();
 
         await deleteAllEntities();
-        console.log("DB cleared");
 
         let customers = createMock.customers(amount);
-        let addresses = createMock.addresses(amount);
-        let categories = createMock.productCategories((amount / 1000) < 100 ? 100 : (amount / 1000));
-        let products = createMock.products(amount, categories);
-        let { orders, orderItems } = createMock.orders(amount, 0, products, false);
-
-        console.log(JSON.stringify({ orderItems, orders }, null, 2))
-
+        let addresses = createMock.addresses(amount, customers);
         await Customer.bulkCreate(customers);
         console.log("customers created");
         customers = null;
@@ -31,6 +25,11 @@ async function seedDb(req, res, next) {
         await Address.bulkCreate(addresses);
         console.log("addresses created");
         addresses = null;
+
+        let categories = createMock.productCategories(calcProductCategoryAmount(amount));
+        let products = createMock.products(amount, categories);
+        let customerIds = Array.from({ length: amount }).map((_, i) => i + 1);
+        let { orders, orderItems } = createMock.orders(amount, customerIds, products, { addOrderIdToOrderItem: true, seperateOrderItems: true });
 
         await ProductCategory.bulkCreate(categories);
         console.log("categories created");
@@ -43,6 +42,7 @@ async function seedDb(req, res, next) {
         await Order.bulkCreate(orders);
         console.log("orders created");
         orders = null;
+        customerIds = null;
 
         await OrderItem.bulkCreate(orderItems);
         console.log("orderItems created");

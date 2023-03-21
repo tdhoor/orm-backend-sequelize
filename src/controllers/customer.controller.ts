@@ -28,6 +28,7 @@ class CustomerController implements ICustomerController {
                     customerId: +req.params.id
                 },
                 order: [['createdAt', 'DESC']],
+                include: [OrderItem],
                 limit: 100
             })
         }, countEntities)
@@ -125,7 +126,6 @@ class CustomerController implements ICustomerController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            console.log(req.body);
             const [affectedCount, affectedRows] = await Customer.update(req.body, {
                 where: {
                     id: +req.body.id

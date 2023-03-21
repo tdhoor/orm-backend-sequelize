@@ -3,12 +3,11 @@ import { IProductController } from "@core/models/controllers/product-controller.
 import { Request, Response, NextFunction } from "express";
 import { countEntities } from "../functions/count-entities.function";
 import { Product } from "../entity/product.entity";
-import { ProductCategory } from "src/entity/product-category.entity";
+import { ProductCategory } from "../entity/product-category.entity";
 
 class ProductController implements IProductController {
     getProductsFromCategory(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
-            console.log(req.params.name);
             return Product.findAll({
                 include: [
                     {

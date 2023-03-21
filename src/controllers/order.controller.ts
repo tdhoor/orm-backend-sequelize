@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { countEntities } from "../functions/count-entities.function";
 import { IOrderController } from "@core/models/controllers/order-controller.model";
 import { Order } from "../entity/order.entity";
-import { OrderItem } from "src/entity/order-item.entity";
+import { OrderItem } from "../entity/order-item.entity";
 
 class OrderController implements IOrderController {
     createOne(req: Request, res: Response, next: NextFunction) {
