@@ -28,7 +28,8 @@ class ProductController implements IProductController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting products from category" })
+                console.log(error);
             })
     }
 
@@ -40,7 +41,8 @@ class ProductController implements IProductController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating product" })
+                console.log(error);
             })
     }
 
@@ -54,7 +56,8 @@ class ProductController implements IProductController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting product" })
+                console.log(error);
             })
     }
 
@@ -69,32 +72,38 @@ class ProductController implements IProductController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating products" })
+                console.log(error);
             })
     }
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const [affectedCount, affectedRows] = await Product.update(req.body, { where: { id: +req.body.id }, returning: true });
-            return affectedRows[0];
+            const product = await Product.findByPk(+req.body.id);
+            product.update(req.body);
+            return product;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error updating product" })
+                console.log(error);
             })
     }
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
-        execTest(() => {
-            return Product.destroy({ where: { id: +req.params.id } });
+        execTest(async () => {
+            const product = await Product.findByPk(+req.params.id);
+            product.destroy();
+            return product;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error deleting product" })
+                console.log(error);
             })
     }
 }

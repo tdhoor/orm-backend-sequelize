@@ -13,7 +13,8 @@ export class ProductCategoryController implements IProductCategoryController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating product category" })
+                console.log(error);
             })
     }
 
@@ -27,7 +28,8 @@ export class ProductCategoryController implements IProductCategoryController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting product category" })
+                console.log(error);
             })
     }
 
@@ -39,32 +41,38 @@ export class ProductCategoryController implements IProductCategoryController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting product categorys" })
+                console.log(error);
             })
     }
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const [affectedCount, affectedRows] = await ProductCategory.update(req.body, { where: { id: +req.body.id }, returning: true });
-            return affectedRows[0];
+            const productCategory = await ProductCategory.findByPk(+req.body.id);
+            productCategory.update(req.body);
+            return productCategory;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error updating product category" })
+                console.log(error);
             })
     }
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
-        execTest(() => {
-            return ProductCategory.destroy({ where: { id: +req.params.id } });
+        execTest(async () => {
+            const productCategory = await ProductCategory.findByPk(+req.params.id);
+            productCategory.destroy();
+            return productCategory;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error deleting product category" })
+                console.log(error);
             })
     }
 }

@@ -14,7 +14,8 @@ class OrderController implements IOrderController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating order" })
+                console.log(error);
             })
     }
 
@@ -29,7 +30,8 @@ class OrderController implements IOrderController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting order" })
+                console.log(error);
             })
     }
 
@@ -45,32 +47,38 @@ class OrderController implements IOrderController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting orders" })
+                console.log(error);
             })
     }
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const [affectedCount, affectedRows] = await Order.update(req.body, { where: { id: +req.body.id }, returning: true });
-            return affectedRows[0];
+            const order = await Order.findByPk(+req.body.id, { include: [OrderItem] });
+            order.update(req.body);
+            return order;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error updating order" })
+                console.log(error);
             })
     }
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
-        execTest(() => {
-            return Order.destroy({ where: { id: +req.params.id } });
+        execTest(async () => {
+            const order = await Order.findByPk(+req.params.id, { include: [OrderItem] });
+            order.destroy();
+            return order;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error deleting order" })
+                console.log(error);
             })
     }
 }

@@ -13,7 +13,8 @@ class OrderItemController implements IOrderItemController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating order item" })
+                console.log(error);
             })
     }
 
@@ -27,7 +28,8 @@ class OrderItemController implements IOrderItemController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting order item" })
+                console.log(error);
             })
     }
 
@@ -39,32 +41,38 @@ class OrderItemController implements IOrderItemController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting order items" })
+                console.log(error);
             })
     }
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const [affectedCount, affectedRows] = await OrderItem.update(req.body, { where: { id: +req.body.id }, returning: true });
-            return affectedRows[0];
+            const orderItem = await OrderItem.findByPk(+req.body.id);
+            orderItem.update(req.body);
+            return orderItem;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error updating order item" })
+                console.log(error);
             })
     }
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
-        execTest(() => {
-            return OrderItem.destroy({ where: { id: +req.params.id } });
+        execTest(async () => {
+            const orderItem = await OrderItem.findByPk(+req.params.id);
+            orderItem.destroy();
+            return orderItem;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error deleting order item" })
+                console.log(error);
             })
     }
 }

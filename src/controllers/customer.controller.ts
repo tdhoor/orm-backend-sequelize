@@ -17,7 +17,8 @@ class CustomerController implements ICustomerController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating customers" })
+                console.log(error);
             })
     }
 
@@ -36,7 +37,8 @@ class CustomerController implements ICustomerController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting customer orders" })
+                console.log(error);
             })
     }
 
@@ -75,7 +77,8 @@ class CustomerController implements ICustomerController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting customer products" })
+                console.log(error);
             })
     }
 
@@ -89,7 +92,8 @@ class CustomerController implements ICustomerController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error creating customer" })
+                console.log(error);
             })
     }
 
@@ -106,13 +110,15 @@ class CustomerController implements ICustomerController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting customer" })
+                console.log(error);
             })
     }
 
     getAll(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Customer.findAll({
+                include: [Address],
                 limit: 100
             });
         }, countEntities)
@@ -120,41 +126,38 @@ class CustomerController implements ICustomerController {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error getting customers" })
+                console.log(error);
             })
     }
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const [affectedCount, affectedRows] = await Customer.update(req.body, {
-                where: {
-                    id: +req.body.id
-                },
-                returning: true
-            });
-            return affectedRows[0];
+            const customer = await Customer.findByPk(+req.body.id, { include: [Address] });
+            customer.update(req.body);
+            return customer;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error updating customer" })
+                console.log(error);
             })
     }
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
-        execTest(() => {
-            return Customer.destroy({
-                where: {
-                    id: +req.params.id
-                }
-            });
+        execTest(async () => {
+            const customer = await Customer.findByPk(+req.params.id, { include: [Address] });
+            customer.destroy();
+            return customer;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
             })
             .catch(error => {
-                res.status(500).send(error);
+                res.status(500).json({ msg: "Error deleting customer" })
+                console.log(error);
             })
     }
 }
