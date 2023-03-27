@@ -8,9 +8,6 @@ import productCategoryRouter from "./routes/product-category.route";
 import productRouter from "./routes/product.route";
 import seedRouter from "./routes/seed.route";
 import { DB } from "./db";
-import { Product } from "./entity/product.entity";
-import { OrderItem } from "./entity/order-item.entity";
-import { Order } from "./entity/order.entity";
 
 const express = require("express");
 
@@ -26,45 +23,6 @@ app.use("/api/order", orderRouter);
 app.use("/api/order-item", orderItemRouter);
 app.use("/api/product-category", productCategoryRouter);
 app.use("/api/product", productRouter);
-
-app.get("/poi/:id", (req, res) => {
-    Product.findAll({
-        include: [
-            {
-                model: OrderItem,
-                attributes: [],
-                where: {
-                    id: +req.params.id
-                }
-            }
-        ]
-    }).then(result => {
-        res.json(result);
-    })
-});
-
-app.get("/po/:id", (req, res) => {
-    Product.findAll({
-        include: [
-            {
-                model: OrderItem,
-                required: true,
-                attributes: [],
-                include: [
-                    {
-                        model: Order,
-                        required: true,
-                        where: {
-                            id: +req.params.id
-                        }
-                    }
-                ]
-            }
-        ]
-    }).then(result => {
-        res.json(result);
-    })
-});
 
 DB.authenticate().then(() => {
     console.log("DB connected");
