@@ -12,45 +12,35 @@ import { calcProductCategoryAmount } from "@core/functions/calc-product-category
 async function seedDb(req, res, next) {
     try {
         const amount: number = +req.params.amount;
-        let p1 = performance.now();
-
         await deleteAllEntities();
 
         let customers = createMock.customers(amount);
         let addresses = createMock.addresses(amount, customers);
-        await Customer.bulkCreate(customers);
-        console.log("customers created");
-        customers = null;
-
-        await Address.bulkCreate(addresses);
-        console.log("addresses created");
-        addresses = null;
+        while (customers.length) {
+            await Customer.bulkCreate(customers.splice(0, 10000));
+        }
+        while (addresses.length) {
+            await Address.bulkCreate(addresses.splice(0, 10000));
+        }
 
         let categories = createMock.productCategories(calcProductCategoryAmount(amount));
         let products = createMock.products(amount, categories);
         let customerIds = Array.from({ length: amount }).map((_, i) => i + 1);
         let { orders, orderItems } = createMock.orders(amount, customerIds, products, { addOrderIdToOrderItem: true, seperateOrderItems: true });
 
-        await ProductCategory.bulkCreate(categories);
-        console.log("categories created");
-        categories = null;
-
-        await Product.bulkCreate(products);
-        console.log("products created");
-        products = null;
-
-        await Order.bulkCreate(orders);
-        console.log("orders created");
-        orders = null;
-        customerIds = null;
-
-        await OrderItem.bulkCreate(orderItems);
-        console.log("orderItems created");
-        orderItems = null;
-
-        console.log(performance.now() - p1);
+        while (categories.length) {
+            await ProductCategory.bulkCreate(categories.splice(0, 10000));
+        }
+        while (products.length) {
+            await Product.bulkCreate(products.splice(0, 10000));
+        }
+        while (orders.length) {
+            await Order.bulkCreate(orders.splice(0, 10000));
+        }
+        while (orderItems.length) {
+            await OrderItem.bulkCreate(orderItems.splice(0, 10000));
+        }
         const count = await countEntities();
-
         res.status(200).json({ message: "DB seeded", count });
     } catch (error) {
         console.error(error);
@@ -58,6 +48,17 @@ async function seedDb(req, res, next) {
     }
 }
 
+async function resetDb(req, res, next) {
+    try {
+        await deleteAllEntities();
+        res.status(200).json({ message: "DB reset" });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: "Error resetting DB" });
+    }
+}
+
 export default {
-    seedDb
+    seedDb,
+    resetDb
 }
