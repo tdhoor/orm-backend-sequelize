@@ -26,10 +26,8 @@ app.use("/api/product", productRouter);
 
 DB.authenticate().then(() => {
     console.log("DB connected");
-
     DB.sync({ force: true }).then(() => {
         console.log("DB synced");
-
         app.listen(process.env.APP_PORT, () => {
             console.log("listen to port: " + process.env.APP_PORT);
         });
