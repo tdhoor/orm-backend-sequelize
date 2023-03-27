@@ -2,6 +2,7 @@ version: '3'
 services:
   app:
     container_name: sequelize.app
+    image: "sequelize_postgres"
     build: .
     ports: 
       - "3000:3000"
@@ -9,6 +10,9 @@ services:
     env_file: .env
     depends_on: 
       - sequelizedbpostgres
+    volumes:
+      - sequelize-app-postgres:/var/lib/sequelize/app/postgres
+ 
 
   # Postgres DB
   sequelizedbpostgres:
@@ -21,9 +25,12 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "testdb"
+    logging:
+      driver: none
     volumes:
-      - sequelize-db-postgres:/var/lib/sequelize/postgres
+      - sequelize-db-postgres:/var/lib/sequelize/db/postgres
       - ./libs/helper/src/db/postgres/testdb.sql:/docker-entrypoint-initdb.d/setup-postgres.sql
       
 volumes:
   sequelize-db-postgres:
+  sequelize-app-postgres:
