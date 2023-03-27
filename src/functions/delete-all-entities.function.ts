@@ -9,7 +9,8 @@ import { Product } from "../entity/product.entity";
 export async function deleteAllEntities() {
     const tableNames = [Address.tableName, Customer.tableName, Order.tableName, OrderItem.tableName, Product.tableName, ProductCategory.tableName];
     for (const tableName of tableNames) {
-        await DB.query(`DELETE from [${tableName}];`)
-        await DB.query(`DBCC CHECKIDENT ([${tableName}], RESEED, 0);`);
+        await DB.query('SET FOREIGN_KEY_CHECKS = 0;');
+        await DB.query('TRUNCATE table `' + tableName + '`;');
+        await DB.query('SET FOREIGN_KEY_CHECKS = 1;');
     }
 }

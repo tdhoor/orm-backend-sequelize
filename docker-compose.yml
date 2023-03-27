@@ -2,36 +2,33 @@ version: '3'
 services:
   app:
     container_name: sequelize.app
-    image: "sequelize_mssql"
+    image: "sequelize_mysql"
     build: .
     ports: 
       - "3000:3000"
     restart: always 
     env_file: .env
     depends_on: 
-      - sequelizedbmssql
+      - sequelizedbmysql
     volumes:
-      - sequelize-app-mssql:/var/lib/sequelize/app/mssql
+      - sequelize-app-mysql:/var/lib/sequelize/app/mysql
  
-  sequelizedbmssql:
-    container_name: sequelize.db.mssql
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
-    command: /bin/bash ./entrypoint.sh
+  sequelizedbmysql:
+    container_name: sequelize.db.mysql
+    image: "mysql:8.0.32"
     restart: always
     ports:
-      - "1433:1433"
+      - "3306:3306"
+    command: 
+      - --default-authentication-plugin=mysql_native_password
     environment:
-      SA_PASSWORD: "a1?%fkARF!24x"
-      MSSQL_PID: Express
-      ACCEPT_EULA: "Y"
+      MYSQL_DATABASE: "testdb"
+      MYSQL_ROOT_PASSWORD: "root"
     logging:
       driver: none
     volumes:
-      - sequelize-db-mssql:/var/lib/sequelize/db/mssql
-      - ./libs/core/src/db/mssql/docker-entrypoint.sh:/entrypoint.sh
-      - ./libs/core/src/db/mssql/docker-db-init.sh:/db-init.sh
-      - ./libs/core/src/db/mssql/testdb.sql:/db-init.sql
+      - sequelize-db-mysql:/var/lib/sequelize/db/mysql
       
 volumes:
-  sequelize-db-mssql:
-  sequelize-app-mssql:
+  sequelize-db-mysql:
+  sequelize-app-mysql:
