@@ -12,6 +12,9 @@ export const DB = new Sequelize(process.env.POSTGRES_DB_NAME, process.env.POSTGR
     dialect: process.env.POSTGRES_DB_TYPE as Dialect,
     host: process.env.POSTGRES_DB_HOST,
     port: +process.env.POSTGRES_DB_PORT,
-    logging: false
+    logging: false,
+    pool: {
+        max: 5
+    }
 });
 
