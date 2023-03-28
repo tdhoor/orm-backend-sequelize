@@ -48,9 +48,13 @@ export class ProductCategoryController implements IProductCategoryController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const productCategory = await ProductCategory.findByPk(+req.body.id);
-            productCategory.update(req.body);
-            return productCategory;
+            const [_, productCategories] = await ProductCategory.update(req.body, {
+                where: {
+                    id: +req.body.id
+                },
+                returning: true
+            });
+            return productCategories[0];
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
@@ -63,9 +67,11 @@ export class ProductCategoryController implements IProductCategoryController {
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const productCategory = await ProductCategory.findByPk(+req.params.id);
-            productCategory.destroy();
-            return productCategory;
+            const id = +req.params.id;
+            await ProductCategory.destroy({
+                where: { id }
+            });
+            return id;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
