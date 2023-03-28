@@ -48,9 +48,8 @@ export class ProductCategoryController implements IProductCategoryController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const productCategory = await ProductCategory.findByPk(+req.body.id);
-            productCategory.update(req.body);
-            return productCategory;
+            await ProductCategory.update(req.body, { where: { id: +req.body.id } });
+            return await ProductCategory.findByPk(+req.body.id);
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);

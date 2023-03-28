@@ -48,9 +48,8 @@ class AddressController implements IAddressController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const address = await Address.findByPk(+req.body.id);
-            address.update(req.body);
-            return address;
+            await Address.update(req.body, { where: { id: +req.body.id } });
+            return await Address.findByPk(+req.body.id);
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
@@ -64,7 +63,7 @@ class AddressController implements IAddressController {
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
             const address = await Address.findByPk(+req.params.id);
-            address.destroy();
+            await address.destroy();
             return address;
         }, countEntities)
             .then(result => {

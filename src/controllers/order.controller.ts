@@ -54,9 +54,8 @@ class OrderController implements IOrderController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const order = await Order.findByPk(+req.body.id, { include: [OrderItem] });
-            order.update(req.body);
-            return order;
+            await Order.update(req.body, { where: { id: +req.body.id } });
+            return await Order.findByPk(req.body.id, { include: [OrderItem] });
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
@@ -70,7 +69,7 @@ class OrderController implements IOrderController {
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
             const order = await Order.findByPk(+req.params.id, { include: [OrderItem] });
-            order.destroy();
+            await order.destroy();
             return order;
         }, countEntities)
             .then(result => {

@@ -79,9 +79,8 @@ class ProductController implements IProductController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const product = await Product.findByPk(+req.body.id);
-            product.update(req.body);
-            return product;
+            await Product.update(req.body, { where: { id: +req.body.id } });
+            return await Product.findByPk(+req.body.id);
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
@@ -95,7 +94,7 @@ class ProductController implements IProductController {
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
             const product = await Product.findByPk(+req.params.id);
-            product.destroy();
+            await product.destroy();
             return product;
         }, countEntities)
             .then(result => {
