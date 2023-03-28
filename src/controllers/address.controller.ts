@@ -62,9 +62,9 @@ class AddressController implements IAddressController {
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const address = await Address.findByPk(+req.params.id);
-            await address.destroy();
-            return address;
+            const id = +req.params.id;
+            await Address.destroy({ where: { id } });
+            return id;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);

@@ -62,9 +62,9 @@ export class ProductCategoryController implements IProductCategoryController {
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const productCategory = await ProductCategory.findByPk(+req.params.id);
-            productCategory.destroy();
-            return productCategory;
+            const id = +req.params.id;
+            await ProductCategory.destroy({ where: { id } });
+            return id;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);

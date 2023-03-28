@@ -62,9 +62,9 @@ class OrderItemController implements IOrderItemController {
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const orderItem = await OrderItem.findByPk(+req.params.id);
-            await orderItem.destroy();
-            return orderItem;
+            const id = +req.params.id;
+            await OrderItem.destroy({ where: { id } });
+            return id;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);

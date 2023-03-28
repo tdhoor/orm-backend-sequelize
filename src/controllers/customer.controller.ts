@@ -138,9 +138,7 @@ class CustomerController implements ICustomerController {
                     id: +req.body.id
                 }
             });
-            return await Customer.findByPk(+req.body.id, {
-                include: [Address]
-            });
+            return await Customer.findByPk(+req.body.id);
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
@@ -153,9 +151,9 @@ class CustomerController implements ICustomerController {
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const customer = await Customer.findByPk(+req.params.id, { include: [Address] });
-            await customer.destroy();
-            return customer;
+            const id = +req.params.id;
+            await Customer.destroy({ where: { id } });
+            return id;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
