@@ -17,7 +17,7 @@ export class OrderItem extends Model<IOrderItem, IOrderItemCreationAttributes> {
     quantity!: number;
 
     @ForeignKey(() => Order)
-    @Column({ type: DataType.INTEGER, allowNull: true })
+    @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: null })
     orderId!: number;
 
     @BelongsTo(() => Order, {
@@ -26,7 +26,7 @@ export class OrderItem extends Model<IOrderItem, IOrderItemCreationAttributes> {
     order!: Order | IOrderCreationAttributes;
 
     @ForeignKey(() => Product)
-    @Column({ type: DataType.INTEGER, allowNull: true })
+    @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: null })
     productId!: number;
 
     @BelongsTo(() => Product, {
