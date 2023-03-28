@@ -48,9 +48,13 @@ class OrderItemController implements IOrderItemController {
 
     updateOne(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const orderItem = await OrderItem.findByPk(+req.body.id);
-            orderItem.update(req.body);
-            return orderItem;
+            const [_, orderItems] = await OrderItem.update(req.body, {
+                where: {
+                    id: +req.body.id
+                },
+                returning: true
+            });
+            return orderItems[0];
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
@@ -63,9 +67,13 @@ class OrderItemController implements IOrderItemController {
 
     deleteOneById(req: Request, res: Response, next: NextFunction) {
         execTest(async () => {
-            const orderItem = await OrderItem.findByPk(+req.params.id);
-            orderItem.destroy();
-            return orderItem;
+            const id = +req.params.id;;
+            await OrderItem.destroy({
+                where: {
+                    id
+                }
+            });
+            return id;
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
