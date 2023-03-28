@@ -27,7 +27,7 @@ export class Product extends Model<IProduct, IProductCreationAttributes> {
     updatedAt?: Date;
 
     @ForeignKey(() => ProductCategory)
-    @Column({ type: DataType.INTEGER, allowNull: true })
+    @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: null })
     productCategoryId!: number;
 
     @BelongsTo(() => ProductCategory, { onDelete: "SET NULL" })

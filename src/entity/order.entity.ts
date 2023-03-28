@@ -21,7 +21,7 @@ export class Order extends Model<IOrder, IOrderCreationAttributes> {
     updatedAt?: Date;
 
     @ForeignKey(() => Customer)
-    @Column({ type: DataType.INTEGER, allowNull: true })
+    @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: null })
     customerId!: number;
 
     @BelongsTo(() => Customer, { onDelete: 'SET NULL' })
