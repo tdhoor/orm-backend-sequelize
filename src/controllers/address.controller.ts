@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { Address } from "../entity/address.entity";
 import { execTest } from "@core/functions/exec-test.function";
-import { countEntities } from "../functions/count-entities.function";
 import { IAddressController } from "@core/models/controllers/address-controller.model";
 
 class AddressController implements IAddressController {
     createOne(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Address.create(req.body);
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -23,7 +22,7 @@ class AddressController implements IAddressController {
             return Address.findOne({
                 where: { id: +req.params.id },
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -36,7 +35,7 @@ class AddressController implements IAddressController {
     getAll(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Address.findAll({ limit: 100 });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -50,7 +49,7 @@ class AddressController implements IAddressController {
         execTest(async () => {
             await Address.update(req.body, { where: { id: +req.body.id } });
             return await Address.findByPk(+req.body.id);
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -65,7 +64,7 @@ class AddressController implements IAddressController {
             const id = +req.params.id;
             await Address.destroy({ where: { id } });
             return id;
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })

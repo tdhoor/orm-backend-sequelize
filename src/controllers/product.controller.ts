@@ -1,7 +1,6 @@
 import { execTest } from "@core/functions/exec-test.function";
 import { IProductController } from "@core/models/controllers/product-controller.model";
 import { Request, Response, NextFunction } from "express";
-import { countEntities } from "../functions/count-entities.function";
 import { Product } from "../entity/product.entity";
 import { ProductCategory } from "../entity/product-category.entity";
 
@@ -23,7 +22,7 @@ class ProductController implements IProductController {
                 limit: 100,
                 subQuery: false
             });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -36,7 +35,7 @@ class ProductController implements IProductController {
     createOne(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Product.create(req.body);
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -51,7 +50,7 @@ class ProductController implements IProductController {
             return Product.findOne({
                 where: { id: +req.params.id }
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -67,7 +66,7 @@ class ProductController implements IProductController {
                 order: [['name', 'ASC']],
                 limit: 100
             });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -81,7 +80,7 @@ class ProductController implements IProductController {
         execTest(async () => {
             await Product.update(req.body, { where: { id: +req.body.id } });
             return await Product.findByPk(+req.body.id);
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -96,7 +95,7 @@ class ProductController implements IProductController {
             const id = +req.params.id;
             await Product.destroy({ where: { id } });
             return id;
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
