@@ -1,6 +1,5 @@
 import { execTest } from "@core/functions/exec-test.function";
 import { Request, Response, NextFunction } from "express";
-import { countEntities } from "../functions/count-entities.function";
 import { IOrderItemController } from "@core/models/controllers/order-item-controller.model";
 import { OrderItem } from "../entity/order-item.entity";
 
@@ -8,7 +7,7 @@ class OrderItemController implements IOrderItemController {
     createOne(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return OrderItem.create(req.body);
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -23,7 +22,7 @@ class OrderItemController implements IOrderItemController {
             return OrderItem.findOne({
                 where: { id: +req.params.id },
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -36,7 +35,7 @@ class OrderItemController implements IOrderItemController {
     getAll(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return OrderItem.findAll({ limit: 100 });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -55,7 +54,7 @@ class OrderItemController implements IOrderItemController {
                 returning: true
             });
             return orderItems[0];
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -74,7 +73,7 @@ class OrderItemController implements IOrderItemController {
                 }
             });
             return id;
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
