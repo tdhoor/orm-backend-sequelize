@@ -1,8 +1,7 @@
 version: '3'
 services:
   app:
-    container_name: sequelize.app
-    image: "sequelize_postgres"
+    container_name: sequelize.app.postgres
     build: .
     ports: 
       - "3000:3000"
