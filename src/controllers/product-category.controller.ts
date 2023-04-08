@@ -1,6 +1,5 @@
 import { execTest } from "@core/functions/exec-test.function";
 import { Request, Response, NextFunction } from "express";
-import { countEntities } from "../functions/count-entities.function";
 import { IProductCategoryController } from "@core/models/controllers/product-category-controller.model";
 import { ProductCategory } from "../entity/product-category.entity";
 
@@ -8,7 +7,7 @@ export class ProductCategoryController implements IProductCategoryController {
     createOne(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return ProductCategory.create(req.body);
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -23,7 +22,7 @@ export class ProductCategoryController implements IProductCategoryController {
             return ProductCategory.findOne({
                 where: { id: +req.params.id },
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -36,7 +35,7 @@ export class ProductCategoryController implements IProductCategoryController {
     getAll(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return ProductCategory.findAll({ limit: 100 });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -55,7 +54,7 @@ export class ProductCategoryController implements IProductCategoryController {
                 returning: true
             });
             return productCategories[0];
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -72,7 +71,7 @@ export class ProductCategoryController implements IProductCategoryController {
                 where: { id }
             });
             return id;
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })

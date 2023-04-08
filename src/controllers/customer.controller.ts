@@ -1,7 +1,6 @@
 import { execTest } from "@core/functions/exec-test.function";
 import { Request, Response, NextFunction } from "express";
 import { Customer } from "../entity/customer.entity";
-import { countEntities } from "../functions/count-entities.function";
 import { ICustomerController } from "@core/models/controllers/customer-controller.model";
 import { Order } from "../entity/order.entity";
 import { Product } from "../entity/product.entity";
@@ -13,7 +12,7 @@ class CustomerController implements ICustomerController {
         execTest(async () => {
             const customers = await Customer.bulkCreate(req.body);
             return { count: customers.length }
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -33,7 +32,7 @@ class CustomerController implements ICustomerController {
                 include: [OrderItem],
                 limit: 100
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -73,7 +72,7 @@ class CustomerController implements ICustomerController {
                 limit: 100,
                 subQuery: false
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -88,7 +87,7 @@ class CustomerController implements ICustomerController {
             return Customer.create(req.body, {
                 include: [Address]
             });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -106,7 +105,7 @@ class CustomerController implements ICustomerController {
                 },
                 include: [Address]
             });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -122,7 +121,7 @@ class CustomerController implements ICustomerController {
                 include: [Address],
                 limit: 100
             });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -141,7 +140,7 @@ class CustomerController implements ICustomerController {
                 returning: true
             });
             return customers[0];
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -158,7 +157,7 @@ class CustomerController implements ICustomerController {
                 where: { id }
             })
             return id;
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })

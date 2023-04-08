@@ -1,6 +1,5 @@
 import { execTest } from "@core/functions/exec-test.function";
 import { Request, Response, NextFunction } from "express";
-import { countEntities } from "../functions/count-entities.function";
 import { IOrderController } from "@core/models/controllers/order-controller.model";
 import { Order } from "../entity/order.entity";
 import { OrderItem } from "../entity/order-item.entity";
@@ -9,7 +8,7 @@ class OrderController implements IOrderController {
     createOne(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Order.create(req.body, { include: [OrderItem] });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -25,7 +24,7 @@ class OrderController implements IOrderController {
                 where: { id: +req.params.id },
                 include: [OrderItem]
             })
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -42,7 +41,7 @@ class OrderController implements IOrderController {
                 order: [['createdAt', 'DESC']],
                 limit: 100
             });
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -61,7 +60,7 @@ class OrderController implements IOrderController {
                 returning: true
             });
             return orderItems[0];
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
@@ -78,7 +77,7 @@ class OrderController implements IOrderController {
                 where: { id }
             });
             return id;
-        }, countEntities)
+        })
             .then(result => {
                 res.status(200).json(result);
             })
