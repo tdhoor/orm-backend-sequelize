@@ -1,8 +1,7 @@
 version: '3'
 services:
   app:
-    container_name: sequelize.app
-    image: "sequelize_mssql"
+    container_name: sequelize.app.mssql
     build: .
     ports: 
       - "3000:3000"
