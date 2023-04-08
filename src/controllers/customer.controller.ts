@@ -10,8 +10,9 @@ import { Address } from "../entity/address.entity";
 
 class CustomerController implements ICustomerController {
     createMany(req: Request, res: Response, next: NextFunction) {
-        execTest(() => {
-            return Customer.bulkCreate(req.body);
+        execTest(async () => {
+            const customers = await Customer.bulkCreate(req.body);
+            return { count: customers.length }
         }, countEntities)
             .then(result => {
                 res.status(200).json(result);
