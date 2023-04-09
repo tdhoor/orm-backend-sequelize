@@ -14,7 +14,7 @@ const express = require("express");
 dotenv.config();
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "100mb" }));
 
 app.use("/api/seed", seedRouter);
 app.use("/api/address", addressRouter);
