@@ -6,7 +6,8 @@ import { IOrder } from '@core/models/entities/order.model';
 
 export interface IOrderCreationAttributes extends Optional<IOrder, "id" | "customer" | "customerId" | "orderItems"> { }
 
-@Table({})
+@Table({
+})
 export class Order extends Model<IOrder, IOrderCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true })
     id!: number;
@@ -15,9 +16,11 @@ export class Order extends Model<IOrder, IOrderCreationAttributes> {
     totalPrice!: number;
 
     @CreatedAt
+    @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
     createdAt?: Date;
 
     @UpdatedAt
+    @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
     updatedAt?: Date;
 
     @ForeignKey(() => Customer)

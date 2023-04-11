@@ -6,7 +6,9 @@ import { IProduct } from '@core/models/entities/product.model';
 
 export interface IProductCreationAttributes extends Optional<IProduct, "id" | "productCategory" | "productCategoryId" | "orderItems"> { }
 
-@Table({})
+@Table({
+    timestamps: true
+})
 export class Product extends Model<IProduct, IProductCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true })
     id!: number;
@@ -21,9 +23,11 @@ export class Product extends Model<IProduct, IProductCreationAttributes> {
     price!: number;
 
     @CreatedAt
+    @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
     createdAt?: Date;
 
     @UpdatedAt
+    @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
     updatedAt?: Date;
 
     @ForeignKey(() => ProductCategory)
