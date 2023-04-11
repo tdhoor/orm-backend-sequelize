@@ -1,5 +1,5 @@
 import { Table, Column, Model, HasMany, CreatedAt, UpdatedAt, DataType, HasOne } from 'sequelize-typescript';
-import { Optional } from 'sequelize';
+import { Optional, Sequelize } from 'sequelize';
 import { Address, IAddressCreationAttributes } from './address.entity';
 import { Order, IOrderCreationAttributes } from "./order.entity"
 import { ICustomer } from '@core/models/entities/customer.model';
@@ -7,6 +7,7 @@ import { ICustomer } from '@core/models/entities/customer.model';
 export interface ICustomerCreationAttributes extends Optional<ICustomer, "id" | "address" | "addressId" | "orders"> { }
 
 @Table({
+    timestamps: true
 })
 export class Customer extends Model<ICustomer, ICustomerCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
@@ -28,19 +29,9 @@ export class Customer extends Model<ICustomer, ICustomerCreationAttributes> {
     lastName!: string;
 
     @CreatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     createdAt?: Date;
 
     @UpdatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     updatedAt?: Date;
 
     @HasOne(() => Address)

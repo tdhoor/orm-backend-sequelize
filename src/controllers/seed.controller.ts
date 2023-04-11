@@ -17,7 +17,7 @@ async function seedDb(req, res, next) {
 
         let customers = createMock.customers(amount);
         let addresses = createMock.addresses(amount, customers);
-        const createdAt = new Date();
+        const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const updatedAt = createdAt;
         while (customers.length) {
             await insert(Customer.tableName, customers.splice(0, 10000).map(c => ({ ...c, createdAt, updatedAt })));
