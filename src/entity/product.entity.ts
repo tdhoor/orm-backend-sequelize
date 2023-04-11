@@ -1,4 +1,4 @@
-import { Table, Column, Model, HasMany, CreatedAt, UpdatedAt, BelongsTo, DataType, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, CreatedAt, UpdatedAt, BelongsTo, DataType, ForeignKey, Default } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { ProductCategory, IProductCategoryCreationAttributes } from './product-category.entity';
 import { IOrderItemCreationAttributes, OrderItem } from './order-item.entity';
@@ -8,22 +8,32 @@ export interface IProductCreationAttributes extends Optional<IProduct, "id" | "p
 
 @Table({})
 export class Product extends Model<IProduct, IProductCreationAttributes> {
-    @Column({ primaryKey: true, autoIncrement: true })
+    @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;
 
-    @Column({ type: new DataType.STRING(100) })
+    @Column({ type: new DataType.STRING(100), allowNull: false })
     name!: string;
 
-    @Column({ type: new DataType.TEXT })
+    @Column({ type: new DataType.TEXT, allowNull: false })
     description!: string;
 
-    @Column({ type: DataType.FLOAT })
+    @Column({ type: DataType.FLOAT, allowNull: false })
     price!: number;
 
     @CreatedAt
+    @Column({
+        type: DataType.DATE,
+        defaultValue: DataType.NOW,
+        allowNull: true
+    })
     createdAt?: Date;
 
     @UpdatedAt
+    @Column({
+        type: DataType.DATE,
+        defaultValue: DataType.NOW,
+        allowNull: true
+    })
     updatedAt?: Date;
 
     @ForeignKey(() => ProductCategory)

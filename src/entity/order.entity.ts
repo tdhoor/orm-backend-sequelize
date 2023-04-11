@@ -1,4 +1,4 @@
-import { Table, Column, Model, HasMany, CreatedAt, UpdatedAt, BelongsTo, DataType, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, CreatedAt, UpdatedAt, BelongsTo, DataType, ForeignKey, Default } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { Customer, ICustomerCreationAttributes } from './customer.entity';
 import { OrderItem, IOrderItemCreationAttributes } from './order-item.entity';
@@ -8,16 +8,26 @@ export interface IOrderCreationAttributes extends Optional<IOrder, "id" | "custo
 
 @Table({})
 export class Order extends Model<IOrder, IOrderCreationAttributes> {
-    @Column({ primaryKey: true, autoIncrement: true })
+    @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;
 
-    @Column({ type: DataType.FLOAT })
+    @Column({ type: DataType.FLOAT, allowNull: false })
     totalPrice!: number;
 
     @CreatedAt
+    @Column({
+        type: DataType.DATE,
+        defaultValue: DataType.NOW,
+        allowNull: true
+    })
     createdAt?: Date;
 
     @UpdatedAt
+    @Column({
+        type: DataType.DATE,
+        defaultValue: DataType.NOW,
+        allowNull: true
+    })
     updatedAt?: Date;
 
     @ForeignKey(() => Customer)
