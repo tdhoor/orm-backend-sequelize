@@ -6,6 +6,9 @@ import { OrderItem } from './entity/order-item.entity';
 import { Order } from './entity/order.entity';
 import { ProductCategory } from './entity/product-category.entity';
 import { Product } from './entity/product.entity';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export const DB = new Sequelize(
     process.env.DB_NAME,

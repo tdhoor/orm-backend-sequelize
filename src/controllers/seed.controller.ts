@@ -8,6 +8,7 @@ import { Product } from "../entity/product.entity";
 import { deleteAllEntities } from "../functions/delete-all-entities.function";
 import { countEntities } from "../functions/count-entities.function";
 import { calcProductCategoryAmount } from "@core/functions/calc-product-category-amount.function";
+import { insert } from "../functions/insert.function";
 
 async function seedDb(req, res, next) {
     try {
@@ -17,11 +18,12 @@ async function seedDb(req, res, next) {
         let customers = createMock.customers(amount);
         let addresses = createMock.addresses(amount, customers);
         while (customers.length) {
-            await Customer.bulkCreate(customers.splice(0, 10000));
+            await insert(Customer.tableName, customers.splice(0, 10000));
         }
         while (addresses.length) {
-            await Address.bulkCreate(addresses.splice(0, 10000));
+            await insert(Address.tableName, addresses.splice(0, 10000));
         }
+        Customer.tableName
 
         let categories = createMock.productCategories(calcProductCategoryAmount(amount));
         let products = createMock.products(amount, categories);
@@ -29,16 +31,16 @@ async function seedDb(req, res, next) {
         let { orders, orderItems } = createMock.orders(amount, customerIds, products, { addOrderIdToOrderItem: true, seperateOrderItems: true });
 
         while (categories.length) {
-            await ProductCategory.bulkCreate(categories.splice(0, 10000));
+            await insert(ProductCategory.tableName, categories.splice(0, 10000));
         }
         while (products.length) {
-            await Product.bulkCreate(products.splice(0, 10000));
+            await insert(Product.tableName, products.splice(0, 10000));
         }
         while (orders.length) {
-            await Order.bulkCreate(orders.splice(0, 10000));
+            await insert(Order.tableName, orders.splice(0, 10000));
         }
         while (orderItems.length) {
-            await OrderItem.bulkCreate(orderItems.splice(0, 10000));
+            await insert(OrderItem.tableName, orderItems.splice(0, 10000));
         }
         const count = await countEntities();
         res.status(200).json({ message: "DB seeded", count });
