@@ -9,23 +9,23 @@ export interface IAddressCreationAttributes extends Optional<IAddress, "id" | "c
     timestamps: false
 })
 export class Address extends Model<IAddress, IAddressCreationAttributes> {
-    @Column({ primaryKey: true, autoIncrement: true })
+    @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;
 
-    @Column({ type: DataType.STRING(100) })
+    @Column({ type: DataType.STRING(100), allowNull: false })
     street!: string;
 
-    @Column({ type: DataType.STRING(100) })
+    @Column({ type: DataType.STRING(100), allowNull: false })
     city!: string;
 
-    @Column({ type: DataType.STRING(20) })
+    @Column({ type: DataType.STRING(20), allowNull: false })
     zipCode!: string;
 
-    @Column({ type: DataType.STRING(100) })
+    @Column({ type: DataType.STRING(100), allowNull: false })
     country!: string;
 
     @ForeignKey(() => Customer)
-    @Column({ type: DataType.INTEGER })
+    @Column({ type: DataType.INTEGER, allowNull: false })
     customerId!: number;
 
     @BelongsTo(() => Customer, {
