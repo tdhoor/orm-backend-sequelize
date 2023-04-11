@@ -13,7 +13,7 @@ export class OrderItem extends Model<IOrderItem, IOrderItemCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true })
     id!: number;
 
-    @Column({ type: DataType.INTEGER })
+    @Column({ type: DataType.INTEGER, allowNull: false })
     quantity!: number;
 
     @ForeignKey(() => Order)

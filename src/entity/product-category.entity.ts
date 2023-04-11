@@ -9,10 +9,10 @@ export interface IProductCategoryCreationAttributes extends Optional<IProductCat
     timestamps: false
 })
 export class ProductCategory extends Model<IProductCategory, IProductCategoryCreationAttributes> {
-    @Column({ primaryKey: true, autoIncrement: true })
+    @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;
 
-    @Column({ type: new DataType.STRING(100) })
+    @Column({ type: new DataType.STRING(100), allowNull: false })
     name!: string;
 
     @HasMany(() => Product)
