@@ -29,19 +29,9 @@ export class Customer extends Model<ICustomer, ICustomerCreationAttributes> {
     lastName!: string;
 
     @CreatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     createdAt?: Date;
 
     @UpdatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     updatedAt?: Date;
 
     @HasOne(() => Address)
