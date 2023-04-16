@@ -21,19 +21,9 @@ export class Product extends Model<IProduct, IProductCreationAttributes> {
     price!: number;
 
     @CreatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     createdAt?: Date;
 
     @UpdatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     updatedAt?: Date;
 
     @ForeignKey(() => ProductCategory)
