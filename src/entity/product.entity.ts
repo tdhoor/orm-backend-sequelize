@@ -6,9 +6,7 @@ import { IProduct } from '@core/models/entities/product.model';
 
 export interface IProductCreationAttributes extends Optional<IProduct, "id" | "productCategory" | "productCategoryId" | "orderItems"> { }
 
-@Table({
-    timestamps: true
-})
+@Table({})
 export class Product extends Model<IProduct, IProductCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;

@@ -6,9 +6,7 @@ import { IOrder } from '@core/models/entities/order.model';
 
 export interface IOrderCreationAttributes extends Optional<IOrder, "id" | "customer" | "customerId" | "orderItems"> { }
 
-@Table({
-    timestamps: true
-})
+@Table({})
 export class Order extends Model<IOrder, IOrderCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;
