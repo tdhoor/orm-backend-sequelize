@@ -6,7 +6,9 @@ import { ICustomer } from '@core/models/entities/customer.model';
 
 export interface ICustomerCreationAttributes extends Optional<ICustomer, "id" | "address" | "addressId" | "orders"> { }
 
-@Table({})
+@Table({
+    timestamps: true
+})
 export class Customer extends Model<ICustomer, ICustomerCreationAttributes> {
     @Column({ primaryKey: true, autoIncrement: true, allowNull: true })
     id!: number;
