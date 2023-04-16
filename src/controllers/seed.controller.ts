@@ -17,8 +17,10 @@ async function seedDb(req, res, next) {
 
         let customers = createMock.customers(amount);
         let addresses = createMock.addresses(amount, customers);
+        const createdAt = new Date();
+        const updatedAt = createdAt;
         while (customers.length) {
-            await insert(Customer.tableName, customers.splice(0, 10000));
+            await insert(Customer.tableName, customers.splice(0, 10000).map(c => ({ ...c, createdAt, updatedAt })));
         }
         while (addresses.length) {
             await insert(Address.tableName, addresses.splice(0, 10000));
@@ -34,10 +36,10 @@ async function seedDb(req, res, next) {
             await insert(ProductCategory.tableName, categories.splice(0, 10000));
         }
         while (products.length) {
-            await insert(Product.tableName, products.splice(0, 10000));
+            await insert(Product.tableName, products.splice(0, 10000).map(c => ({ ...c, createdAt, updatedAt })));
         }
         while (orders.length) {
-            await insert(Order.tableName, orders.splice(0, 10000));
+            await insert(Order.tableName, orders.splice(0, 10000).map(c => ({ ...c, createdAt, updatedAt })));
         }
         while (orderItems.length) {
             await insert(OrderItem.tableName, orderItems.splice(0, 10000));
