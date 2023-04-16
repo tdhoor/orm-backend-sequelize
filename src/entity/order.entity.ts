@@ -15,19 +15,9 @@ export class Order extends Model<IOrder, IOrderCreationAttributes> {
     totalPrice!: number;
 
     @CreatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     createdAt?: Date;
 
     @UpdatedAt
-    @Column({
-        type: DataType.DATE,
-        defaultValue: DataType.NOW,
-        allowNull: true
-    })
     updatedAt?: Date;
 
     @ForeignKey(() => Customer)
