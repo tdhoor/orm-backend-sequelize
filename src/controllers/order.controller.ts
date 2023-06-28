@@ -22,7 +22,13 @@ class OrderController implements IOrderController {
         execTest(() => {
             return Order.findOne({
                 where: { id: +req.params.id },
-                include: [OrderItem]
+                include: [
+                    {
+                        model: OrderItem,
+                        required: false
+                    }
+                ],
+                subQuery: false
             })
         })
             .then(result => {
@@ -37,9 +43,15 @@ class OrderController implements IOrderController {
     getAll(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Order.findAll({
-                include: [OrderItem],
+                include: [
+                    {
+                        model: OrderItem,
+                        required: false
+                    }
+                ],
                 order: [['createdAt', 'DESC']],
-                limit: 100
+                limit: 100,
+                subQuery: false
             });
         })
             .then(result => {
