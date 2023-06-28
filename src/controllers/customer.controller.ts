@@ -29,8 +29,14 @@ class CustomerController implements ICustomerController {
                     customerId: +req.params.id
                 },
                 order: [['createdAt', 'DESC']],
-                include: [OrderItem],
-                limit: 100
+                include: [
+                    {
+                        model: OrderItem,
+                        required: true
+                    }
+                ],
+                limit: 100,
+                subQuery: false
             })
         })
             .then(result => {
@@ -50,6 +56,7 @@ class CustomerController implements ICustomerController {
                         model: OrderItem,
                         required: true,
                         attributes: [],
+                        separate: true,
                         include: [
                             {
                                 model: Order,
@@ -103,7 +110,13 @@ class CustomerController implements ICustomerController {
                 where: {
                     id: +req.params.id
                 },
-                include: [Address]
+                include: [
+                    {
+                        model: Address,
+                        required: false
+                    }
+                ],
+                subQuery: false
             });
         })
             .then(result => {
@@ -118,8 +131,14 @@ class CustomerController implements ICustomerController {
     getAll(req: Request, res: Response, next: NextFunction) {
         execTest(() => {
             return Customer.findAll({
-                include: [Address],
-                limit: 100
+                include: [
+                    {
+                        model: Address,
+                        required: false
+                    }
+                ],
+                limit: 100,
+                subQuery: false
             });
         })
             .then(result => {
