@@ -56,7 +56,7 @@ class CustomerController implements ICustomerController {
                         model: OrderItem,
                         required: true,
                         attributes: [],
-                        separate: true,
+                        separate: false,
                         include: [
                             {
                                 model: Order,
